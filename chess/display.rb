@@ -1,6 +1,7 @@
 require_relative 'board'
 require 'colorize'
 require_relative 'cursorable'
+require 'byebug'
 
 class Display
   include Cursorable
@@ -31,7 +32,7 @@ class Display
     elsif (i + j).odd?
       bg = :light_yellow
     else
-      bg = :magenta 
+      bg = :magenta
     end
 
     if color == :white
@@ -46,7 +47,7 @@ class Display
       input = get_input
   end
 
-  def the_game
+  def get_our_input
     input = nil
     until input
       system("clear")
@@ -55,4 +56,24 @@ class Display
     end
     input
   end
+
+  def the_game
+    until @board.check_mate?(:black)
+      if @board.in_check?(:white)
+        puts "White in check"
+      elsif @board.in_check?(:black)
+        puts "Black in check"
+      end
+      start = get_our_input
+      until @board[start]
+        start = get_our_input
+      end
+      end_pos = get_our_input
+      @board.move(start, end_pos)
+    end
+  end
 end
+
+b = Board.new
+dsp = Display.new(b)
+dsp.the_game

@@ -7,6 +7,7 @@ class SteppingPiece < Piece
       next_position = vector_add(@position, vector)
       moves << next_position if board.in_bounds?(next_position)
     end
-    moves.select { |move| board.unoccupied?(move) }
+    moves.select! { |move| board.unoccupied?(move) || enemy?(move) }
+    moves
   end
 end

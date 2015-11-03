@@ -4,9 +4,9 @@ class Board
   attr_accessor :grid
   attr_reader :grid
 
-  def initialize
+  def initialize(clone = false)
     @grid = Array.new(8) { Array.new(8) }
-    populate
+    populate unless clone
   end
 
   def populate
@@ -35,6 +35,17 @@ class Board
   end
 
   def move(start, end_pos)
+    piece = self[start]
+    if piece.moves.include?(end_pos)
+      unless next_move_in_check?(start, end_pos, self[start].color)
+        update_pos(start, end_pos)
+        self[end_pos] = piece
+        self[start] = nil
+      end
+    end
+  end
+
+  def move!(start, end_pos)
     piece = self[start]
     if piece.moves.include?(end_pos)
       update_pos(start, end_pos)
@@ -67,5 +78,45 @@ class Board
   def unoccupied?(pos)
     self[pos].nil?
   end
+
+
+  def next_move_in_check?(start, end_pos, color)
+    board_clone = self.board_dup
+    board_clone.move!(start, end_pos)
+    board_clone.in_check?(color)
+  end
+
+  def board_dup
+    board_clone = Board.new(true)
+    grid_clone = self.grid.map do |row|
+      row.map { |tile| tile.is_a?(Piece) ? tile.piece_dup(board_clone) : tile }
+    end
+    board_clone.grid = grid_clone
+    board_clone
+  end
+
+  def in_check?(color)
+    pieces = grid.flatten.reject { |tile| tile.nil? }
+    king = pieces.select { |piece| piece.is_a?(KingPiece) && piece.color == color }
+    king = king.first #otherwise king is in a one element array
+    enemies = pieces.select { |piece| piece.color != color }
+    enemies.each do |piece|
+      return true if piece.moves.include?(king.position)
+    end
+    false
+  end
+
+  def check_mate?(color)
+    pieces = grid.flatten.reject { |tile| tile.nil? }
+    pieces.select! { |piece| piece.color == color }
+    pieces.each do |piece|
+      piece.moves.each do |move|
+        return false unless next_move_in_check?(piece.position, move, color)
+      end
+    end
+    true
+  end
+
+
 
 end

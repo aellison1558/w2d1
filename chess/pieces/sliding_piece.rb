@@ -17,6 +17,7 @@ class SlidingPiece < Piece
         path << next_position
         next_position = vector_add(next_position, vector)
       else
+        path << next_position if enemy?(next_position)
         break
       end
     end
