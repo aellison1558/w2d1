@@ -47,33 +47,5 @@ class Display
       input = get_input
   end
 
-  def get_our_input
-    input = nil
-    until input
-      system("clear")
-      render
-      input = cursor_input
-    end
-    input
-  end
 
-  def the_game
-    until @board.check_mate?(:black)
-      if @board.in_check?(:white)
-        puts "White in check"
-      elsif @board.in_check?(:black)
-        puts "Black in check"
-      end
-      start = get_our_input
-      until @board[start]
-        start = get_our_input
-      end
-      end_pos = get_our_input
-      @board.move(start, end_pos)
-    end
-  end
 end
-
-b = Board.new
-dsp = Display.new(b)
-dsp.the_game

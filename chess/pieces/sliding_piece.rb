@@ -1,13 +1,17 @@
 class SlidingPiece < Piece
 
-  def moves(directions)
+  def moves(move_dirs)
     possible_moves = []
-    directions.each do |vector|
+    move_dirs.each do |vector|
       path = follow_vector(vector)
       possible_moves += path
     end
     possible_moves
   end
+
+  # def move_dirs
+  #   raise NotImplemetedError, "you need to implement move_dirs"
+  # end
 
   def follow_vector(vector)
     path = []

@@ -34,15 +34,19 @@ class Board
     end
   end
 
+  def valid_move?(start, end_pos)
+    piece = self[start]
+    return false unless piece.moves.include?(end_pos)
+    return false if next_move_in_check?(start, end_pos, piece.color)
+    true
+  end
+
   def move(start, end_pos)
     piece = self[start]
-    if piece.moves.include?(end_pos)
-      unless next_move_in_check?(start, end_pos, self[start].color)
-        update_pos(start, end_pos)
-        self[end_pos] = piece
-        self[start] = nil
-      end
-    end
+    return nil unless valid_move?(start, end_pos)
+    update_pos(start, end_pos)
+    self[end_pos] = piece
+    self[start] = nil
   end
 
   def move!(start, end_pos)
@@ -62,8 +66,8 @@ class Board
   end
 
   def [](pos)
-    x, y = pos
-    @grid[x][y]
+    row, col = pos
+    @grid[row][col]
   end
 
   def []=(pos, val)
