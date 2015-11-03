@@ -15,7 +15,7 @@ class Display
       print row_index
       row.each_with_index do |col, col_index|
         if col
-          print "#{col.to_s} ".colorize(colors_for(row_index, col_index))
+          print "#{col.to_s} ".colorize(colors_for(row_index, col_index, col.color))
         else
           print "  ".colorize(colors_for(row_index, col_index))
         end
@@ -25,23 +25,25 @@ class Display
     ""
   end
 
-  def colors_for(i, j)
+  def colors_for(i, j, color = nil)
     if [i, j] == @cursor_pos
       bg = :light_red
     elsif (i + j).odd?
-      bg = :light_blue
+      bg = :light_yellow
     else
-      bg = :blue
+      bg = :magenta 
     end
-    { background: bg, color: :white }
+
+    if color == :white
+      text_color = :white
+    elsif color == :black
+      text_color = :black
+    end
+    { background: bg, color: text_color }
   end
 
   def cursor_input
-    # input = nil
-    # until input
       input = get_input
-    # end
-    # input
   end
 
   def the_game

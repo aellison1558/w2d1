@@ -1,4 +1,5 @@
 require_relative 'piece'
+require 'byebug'
 class Board
   attr_accessor :grid
   attr_reader :grid
@@ -34,11 +35,19 @@ class Board
   end
 
   def move(start, end_pos)
-    # Can put these either here or wherever we get user input
-    # raise "No piece at start position" if self[start].nil?
-    # raise error if can't move to end_pos
     piece = self[start]
-    self[end_pos] = piece
+    if piece.moves.include?(end_pos)
+      update_pos(start, end_pos)
+      self[end_pos] = piece
+      self[start] = nil
+    end
+  end
+
+  def update_pos(start, end_pos)
+    self[start].position = end_pos
+    if self[start].is_a?(PawnPiece)
+      self[start].first_move = false
+    end
   end
 
   def [](pos)
