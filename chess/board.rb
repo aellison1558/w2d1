@@ -113,14 +113,35 @@ class Board
   end
 
   def check_mate?(color)
-    pieces = grid.flatten.reject { |tile| tile.nil? }
-    pieces.select! { |piece| piece.color == color }
-    pieces.each do |piece|
-      piece.moves.each do |move|
-        return false unless next_move_in_check?(piece.position, move, color)
+    if in_check?(color)
+      pieces = grid.flatten.reject { |tile| tile.nil? }
+      pieces.select! { |piece| piece.color == color }
+      pieces.each do |piece|
+        piece.moves.each do |move|
+          return false unless next_move_in_check?(piece.position, move, color)
+        end
+      end
+      true
+    else
+      false
+    end
+  end
+
+  def stalemate?
+    pieces = grid.flatten.reject { |tile| tile.nil? || tile.is_a?(KingPiece)}
+    return true if pieces.empty?
+    [:white, :black].each do |color|
+      unless in_check?(color)
+        pieces = grid.flatten.reject { |tile| tile.nil? }
+        pieces.select! { |piece| piece.color == color }
+        pieces.each do |piece|
+          piece.moves.each do |move|
+            return false unless next_move_in_check?(piece.position, move, color)
+          end
+        end
+        return true
       end
     end
-    true
   end
 
   def pawn_promotion

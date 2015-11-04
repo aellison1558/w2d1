@@ -70,6 +70,8 @@ class Display
       puts "White wins!"
     elsif @board.check_mate?(:white)
       puts "Black wins!"
+    elsif @board.stalemate?
+      puts "Stalemate!"
     end
   end
 

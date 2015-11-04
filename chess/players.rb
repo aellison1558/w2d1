@@ -1,5 +1,6 @@
 require_relative 'display'
-
+class StalemateError < StandardError
+end
 class HumanPlayer
   attr_reader :display
 
@@ -34,10 +35,11 @@ class ComputerPlayer < HumanPlayer
     piece = pieces.sample
     move = piece.moves.sample
     until @board.valid_move?(piece.position, move)
+      raise StalemateError if @board.stalemate?
       piece = pieces.sample
       move = piece.moves.sample
     end
     @board.move(piece.position, move)
-    sleep(1)
+    # sleep(1)
   end
 end

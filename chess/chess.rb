@@ -12,9 +12,13 @@ class Game
   end
 
   def play
-    until @board.check_mate?(:black) || @board.check_mate?(:white)
+    begin
+    until @board.check_mate?(:black) || @board.check_mate?(:white) || @board.stalemate?
       move_piece
       switch_players
+    end
+    rescue StalemateError
+      @current_player.display.finish_message
     end
     @current_player.display.finish_message
   end
