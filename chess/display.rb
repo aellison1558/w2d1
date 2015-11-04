@@ -26,6 +26,14 @@ class Display
     ""
   end
 
+  def prompt_check
+    if @board.in_check?(:white)
+      puts "White in check"
+    elsif @board.in_check?(:black)
+      puts "Black in check"
+    end
+  end
+
   def colors_for(i, j, color = nil)
     if [i, j] == @cursor_pos
       bg = :light_red
@@ -44,7 +52,25 @@ class Display
   end
 
   def cursor_input
+    input = nil
+    until input
+      system("clear")
+      render
+      prompt_check
+      puts "Make a move"
       input = get_input
+    end
+    input
+  end
+
+  def finish_message
+    system("clear")
+    render
+    if @board.check_mate?(:black)
+      puts "White wins!"
+    elsif @board.check_mate?(:white)
+      puts "Black wins!"
+    end
   end
 
 

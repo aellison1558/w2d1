@@ -25,9 +25,10 @@ class Board
 
   def place_pieces(color, row, row_index)
     #refactor to pass a position to new pieces
-    pieces = [RookPiece.new(color, nil, self), KnightPiece.new(color, nil, self), BishopPiece.new(color, nil, self)]
+    left_pieces = [RookPiece.new(color, nil, self), KnightPiece.new(color, nil, self), BishopPiece.new(color, nil, self)]
     royalty = [QueenPiece.new(color, nil, self), KingPiece.new(color, nil, self)]
-    pieces = pieces + royalty + pieces.reverse
+    right_pieces = [BishopPiece.new(color, nil, self), KnightPiece.new(color, nil, self), RookPiece.new(color,nil,self)]
+    pieces = left_pieces + royalty + right_pieces
     row.each_index do |i|
       row[i] = pieces.shift
       row[i].position = [row_index, i]
@@ -47,6 +48,7 @@ class Board
     update_pos(start, end_pos)
     self[end_pos] = piece
     self[start] = nil
+    pawn_promotion
   end
 
   def move!(start, end_pos)
@@ -71,8 +73,8 @@ class Board
   end
 
   def []=(pos, val)
-    x, y = pos
-    @grid[x][y] = val
+    row, col = pos
+    @grid[row][col] = val
   end
 
   def in_bounds?(pos)
@@ -121,6 +123,14 @@ class Board
     true
   end
 
+  def pawn_promotion
+    grid[0].each_with_index do |tile, idx|
+      self[[0, idx]] = QueenPiece.new(:white, [0, idx], self) if tile.is_a?(PawnPiece)
+    end
 
+    grid[7].each_with_index do |tile, idx|
+      self[[7, idx]] = QueenPiece.new(:black, [7, idx], self) if tile.is_a?(PawnPiece)
+    end
+  end
 
 end

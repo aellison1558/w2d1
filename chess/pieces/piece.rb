@@ -3,8 +3,6 @@ class Piece
 
   DIAGONAL_VECTORS = [[1, 1],[1, -1],[-1, -1],[-1, 1]]
   STRAIGHT_VECTORS = [[1, 0], [0, -1], [-1, 0], [0, 1]]
-  KNIGHT_VECTORS = [[2, 1], [2, -1], [-2, 1], [-2, -1],
-                    [1, 2], [1, -2], [-1, 2], [-1, -2]]
 
   attr_accessor :position
   attr_reader :board, :position, :color
