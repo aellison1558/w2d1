@@ -35,8 +35,10 @@ class Display
   end
 
   def colors_for(i, j, color = nil)
+    mode = nil
     if [i, j] == @cursor_pos
       bg = :light_red
+      mode = :blink
     elsif (i + j).odd?
       bg = :light_yellow
     else
@@ -48,7 +50,7 @@ class Display
     elsif color == :black
       text_color = :black
     end
-    { background: bg, color: text_color }
+    { background: bg, color: text_color, mode: mode }
   end
 
   def cursor_input

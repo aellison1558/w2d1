@@ -42,5 +42,5 @@ player1 = HumanPlayer.new("Marek", board, :white)
 player2 = HumanPlayer.new("Andrew", board, :black)
 player3 = ComputerPlayer.new("Droid1", board, :white)
 player4 = ComputerPlayer.new("Droid2", board, :black)
-game = Game.new(player3, player4, board)
+game = Game.new(player1, player4, board)
 game.play
