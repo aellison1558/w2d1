@@ -43,3 +43,6 @@ class ComputerPlayer < HumanPlayer
     # sleep(1)
   end
 end
+
+#this is a test line to test aliases for git stuff
+puts 'test'
